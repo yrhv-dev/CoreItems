@@ -9,6 +9,9 @@ public class CommandProperties {
     private String cooldownMessage = null; // null means use global message
     private int cooldownMessageInterval = -1; // -1 means use global interval
     
+    // Whether to show a visual Minecraft cooldown effect when the command is on cooldown
+    private boolean showItemCooldown = false;
+    
     public CommandProperties(String command) {
         this.command = command;
     }
@@ -61,5 +64,13 @@ public class CommandProperties {
      */
     public int getEffectiveCooldownMessageInterval(int globalInterval) {
         return cooldownMessageInterval > 0 ? cooldownMessageInterval : globalInterval;
+    }
+    
+    public boolean isShowItemCooldown() {
+        return showItemCooldown;
+    }
+    
+    public void setShowItemCooldown(boolean showItemCooldown) {
+        this.showItemCooldown = showItemCooldown;
     }
 }

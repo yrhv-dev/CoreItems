@@ -35,13 +35,23 @@
 #     cooldown: 5000                       # Per-command cooldown in milliseconds
 #     cooldown-message: "&cOn cooldown!"   # Per-command cooldown message
 #     cooldown-message-interval: 3         # Per-command cooldown message interval
+#     show-item-cooldown: true             # When true, shows Minecraft-style cooldown visual effect on the item when on cooldown
 #
 # - left-click-command: Command to execute when left-clicking with item (use {player} as placeholder)
-#   This can also use the same nested format as right-click-command for per-command properties
+#   This can also use the same nested format as right-click-command for per-command properties:
+#   left-click-command:
+#     command: "example command {player}"
+#     cooldown: 5000
+#     cooldown-message: "&cOn cooldown!"
+#     cooldown-message-interval: 3
+#     show-item-cooldown: true             # When true, shows Minecraft-style cooldown visual effect on the item when on cooldown
 #
 # - cooldown: Item-specific cooldown in milliseconds (overrides global cooldown in config.yml)
 # - cooldown-message: Custom message to show when item is on cooldown (overrides global message)
 # - cooldown-message-interval: Number of messages to send during cooldown period (overrides global setting)
+# - show-item-cooldown: When true, shows Minecraft-style cooldown visual effect on the item whenever a cooldown is active
+# - droppable: true/false to control whether the item can be dropped by the player (default: true)
+# - drop-message: Message to show when player attempts to drop an item that cannot be dropped
 #
 # Note: Per-command cooldown properties take precedence over item-level properties,
 # which take precedence over global settings in config.yml
@@ -68,9 +78,13 @@ example_sword:
     cooldown: 5000
     cooldown-message: "&#FF6347Your fire magic is recharging! (5s)"
     cooldown-message-interval: 3
+    show-item-cooldown: true
   left-click-command: "execute at {player} run summon lightning_bolt ~ ~ ~"
   cooldown: 10000 
   cooldown-message: "&cThis item is on cooldown!"
+  show-item-cooldown: true
+  droppable: false
+  drop-message: "&#FF0000This magical sword cannot be dropped!"
 
 magic_bow:
   material: BOW
@@ -99,18 +113,26 @@ special_apple:
     - "&7A magical apple that gives special effects"
     - "&#FF1493Glows with &#FFC0CBmystic energy"
     - "&aRight-click to heal and get resistance (10s cooldown)"
-    - "&cLeft-click to broadcast a message (5s cooldown)"
+    - "&dShows a visual cooldown effect when used"
   custom-model-data: 3001
-  is_enchanted: true
+  glowing: true
   right-click-command:
-    command: "summon fireball ~ ~ ~ {direction:[0.0,0.0,0.0],ExplosionPower:1}"
-    cooldown: 5000
-    cooldown-message: "&#FF6347Your fire magic is recharging! (5s)"
-    cooldown-message-interval: 3
+    command: "effect give {player} regeneration 10 1 true"
+    cooldown: 10000
+    cooldown-message: "&d⚡ The apple is still recharging! &7(%remaining%s)"
+    minecraft-cooldown: 10000
+    minecraft-cooldown-message: "&d⚡ The apple is visibly recharging!"
+    minecraft-cooldown-message-interval: 2
+  item-flags:
+    - HIDE_ENCHANTS
   left-click-command:
     command: "execute at {player} run summon lightning_bolt ~ ~ ~"
     cooldown: 10000 
-    cooldown-message: "&cYour lightning magic is recharging!"
+    cooldown-message: "&cYour lightning magic is recharging! (%remaining%s)"
+    # Minecraft cooldown properties - shows visual cooldown on the item
+    minecraft-cooldown: 10000
+    minecraft-cooldown-message: "&c⚡ Lightning charging up visibly!"
+    minecraft-cooldown-message-interval: 2
     cooldown-message-interval: 2
 
 enchanted_book:

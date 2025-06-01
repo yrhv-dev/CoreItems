@@ -196,6 +196,11 @@ public class NamespaceLoader {
                 if (rightClickSection.contains("cooldown-message-interval")) {
                     properties.setCooldownMessageInterval(rightClickSection.getInt("cooldown-message-interval"));
                 }
+                
+                // Handle show-item-cooldown property
+                if (rightClickSection.contains("show-item-cooldown")) {
+                    properties.setShowItemCooldown(rightClickSection.getBoolean("show-item-cooldown"));
+                }
             } else {
                 // Just a simple command
                 item.setRightClickCommand(rightClickObj.toString());
@@ -236,6 +241,12 @@ public class NamespaceLoader {
                 if (leftClickSection.contains("cooldown-message-interval")) {
                     properties.setCooldownMessageInterval(leftClickSection.getInt("cooldown-message-interval"));
                 }
+                
+                // Parse Minecraft cooldown properties for left-click command
+                // Handle show-item-cooldown property
+                if (leftClickSection.contains("show-item-cooldown")) {
+                    properties.setShowItemCooldown(leftClickSection.getBoolean("show-item-cooldown"));
+                }
             } else {
                 // Just a simple command
                 item.setLeftClickCommand(leftClickObj.toString());
@@ -257,12 +268,29 @@ public class NamespaceLoader {
             item.setCooldownMessageInterval(section.getInt("cooldown-message-interval"));
         }
         
+        // Parse show-item-cooldown property
+        if (section.contains("show-item-cooldown")) {
+            item.setShowItemCooldown(section.getBoolean("show-item-cooldown"));
+        }
+        
         if (section.contains("cancel_right_click")) {
             item.setCancelRightClick(section.getBoolean("cancel_right_click"));
         }
         
         if (section.contains("cancel_left_click")) {
             item.setCancelLeftClick(section.getBoolean("cancel_left_click"));
+        }
+        
+        // Parse droppable property
+        if (section.contains("droppable")) {
+            item.setDroppable(section.getBoolean("droppable"));
+        }
+        
+        // Parse drop message
+        if (section.contains("drop-message")) {
+            String message = section.getString("drop-message");
+            message = translateHexColorCodes(message);
+            item.setDropMessage(ChatColor.translateAlternateColorCodes('&', message));
         }
         
         return item;

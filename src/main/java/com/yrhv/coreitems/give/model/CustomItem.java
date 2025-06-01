@@ -35,6 +35,16 @@ public class CustomItem {
     private int cooldown = -1; // -1 means use global cooldown (legacy support)
     private String cooldownMessage = null; // null means use global message (legacy support)
     private int cooldownMessageInterval = -1; // -1 means use global interval (legacy support)
+    
+    // Whether to show a visual Minecraft cooldown effect when the item is on cooldown
+    private boolean showItemCooldown = false;
+    
+    // Whether the item can be dropped by the player
+    private boolean droppable = true;
+    
+    // Message to show when player attempts to drop an item that cannot be dropped
+    private String dropMessage = "&cThis item cannot be dropped";
+    
     private boolean cancelRightClick = true;
     private boolean cancelLeftClick = true;
     
@@ -263,6 +273,14 @@ public class CustomItem {
         this.cooldownMessageInterval = cooldownMessageInterval;
     }
     
+    public boolean isShowItemCooldown() {
+        return showItemCooldown;
+    }
+    
+    public void setShowItemCooldown(boolean showItemCooldown) {
+        this.showItemCooldown = showItemCooldown;
+    }
+    
     public boolean shouldCancelRightClick() {
         return cancelRightClick;
     }
@@ -322,5 +340,37 @@ public class CustomItem {
      */
     public int getEffectiveCooldownMessageInterval(int globalInterval) {
         return cooldownMessageInterval > 0 ? cooldownMessageInterval : globalInterval;
+    }
+    
+    /**
+     * Gets whether this item can be dropped by the player
+     * @return true if the item can be dropped, false otherwise
+     */
+    public boolean isDroppable() {
+        return droppable;
+    }
+    
+    /**
+     * Sets whether this item can be dropped by the player
+     * @param droppable true if the item can be dropped, false otherwise
+     */
+    public void setDroppable(boolean droppable) {
+        this.droppable = droppable;
+    }
+    
+    /**
+     * Gets the message to show when a player attempts to drop an item that cannot be dropped
+     * @return The drop message, or null if no message is set
+     */
+    public String getDropMessage() {
+        return dropMessage;
+    }
+    
+    /**
+     * Sets the message to show when a player attempts to drop an item that cannot be dropped
+     * @param dropMessage The drop message to set
+     */
+    public void setDropMessage(String dropMessage) {
+        this.dropMessage = dropMessage;
     }
 }

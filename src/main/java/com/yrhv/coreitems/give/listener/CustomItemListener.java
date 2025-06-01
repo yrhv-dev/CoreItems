@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -186,6 +187,15 @@ public class CustomItemListener implements Listener {
                 // Store cooldown
                 setCooldownExpirationTime(playerUUID, itemId, RIGHT_CLICK_ID, currentTime + cmdCooldown);
                 
+                // Check if we should apply Minecraft-style cooldown for this command
+                if (rightClickProps.isShowItemCooldown()) {
+                    // Calculate Minecraft cooldown in ticks (20 ticks = 1 second)
+                    int cooldownTicks = (int) (cmdCooldown / 50); // Convert ms to ticks (roughly)
+                    
+                    // Apply Minecraft cooldown to the current item
+                    player.setCooldown(item.getType(), cooldownTicks);
+                }
+                
                 commandExecuted = false; // Skip the global cooldown application
             }
             
@@ -215,6 +225,15 @@ public class CustomItemListener implements Listener {
                 // Store cooldown
                 setCooldownExpirationTime(playerUUID, itemId, LEFT_CLICK_ID, currentTime + cmdCooldown);
                 
+                // Check if we should apply Minecraft-style cooldown for this command
+                if (leftClickProps.isShowItemCooldown()) {
+                    // Calculate Minecraft cooldown in ticks (20 ticks = 1 second)
+                    int cooldownTicks = (int) (cmdCooldown / 50); // Convert ms to ticks (roughly)
+                    
+                    // Apply Minecraft cooldown to the current item
+                    player.setCooldown(item.getType(), cooldownTicks);
+                }
+                
                 commandExecuted = false; // Skip the global cooldown application
             }
             
@@ -226,12 +245,20 @@ public class CustomItemListener implements Listener {
         
         // Apply cooldown if a command was executed
         if (commandExecuted) {
-            long itemCooldown = customItem.getEffectiveCooldown(globalCooldown);
+            // Apply cooldown at the item level for all interactions
+            long cooldownTime = customItem.getEffectiveCooldown(globalCooldown);
+            setCooldownExpirationTime(playerUUID, itemId, ITEM_COOLDOWN_ID, currentTime + cooldownTime);
             
-            // Store cooldown
-            setCooldownExpirationTime(playerUUID, itemId, ITEM_COOLDOWN_ID, currentTime + itemCooldown);
+            // Check if we should apply Minecraft-style cooldown
+            if (customItem.isShowItemCooldown()) {
+                // Calculate Minecraft cooldown in ticks (20 ticks = 1 second)
+                int cooldownTicks = (int) (cooldownTime / 50); // Convert ms to ticks (roughly)
+                
+                // Apply Minecraft cooldown to the current item
+                player.setCooldown(item.getType(), cooldownTicks);
+            }
             
-            // Notify PlayerDataManager to update inventory tracking after command execution
+            // Track inventory when item commands are executed
             playerDataManager.onItemGive(player);
         }
     }
@@ -376,5 +403,33 @@ public class CustomItemListener implements Listener {
         lastMessageData.computeIfAbsent(playerUUID, k -> new ConcurrentHashMap<>())
                 .computeIfAbsent(itemId, k -> new ConcurrentHashMap<>())
                 .put(commandId, messageTime);
+    }
+    
+    /**
+     * Handles when a player drops an item, preventing them from dropping non-droppable custom items
+     * @param event The player drop item event
+     */
+    @EventHandler
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
+        Player player = event.getPlayer();
+        ItemStack droppedItem = event.getItemDrop().getItemStack();
+        
+        // Find the matching custom item
+        CustomItem customItem = findMatchingCustomItem(droppedItem);
+        if (customItem == null) {
+            return; // Not a custom item, allow drop
+        }
+        
+        // Check if item is droppable
+        if (!customItem.isDroppable()) {
+            // Cancel the drop event
+            event.setCancelled(true);
+            
+            // Send message to player if one is configured
+            String dropMessage = customItem.getDropMessage();
+            if (dropMessage != null && !dropMessage.isEmpty()) {
+                player.sendMessage(dropMessage);
+            }
+        }
     }
 }

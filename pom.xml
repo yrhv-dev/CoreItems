@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.yrhv</groupId>
     <artifactId>CoreItems</artifactId>
-    <version>1.0.02</version>
+    <version>1.0.03</version>
     <packaging>jar</packaging>
 
     <name>CoreItems</name>
