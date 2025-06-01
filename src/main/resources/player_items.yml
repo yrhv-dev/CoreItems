@@ -1,0 +1,13 @@
+# CoreItems - Player data file
+# This file tracks player custom item inventory
+# It will be automatically saved and loaded based on configuration
+
+# Format:
+# player-uuid:
+#   item-id: amount
+
+# Example:
+# 00000000-0000-0000-0000-000000000000:
+#   example_sword: 1
+#   magic_wand: 3
+#   elite_helmet: 1

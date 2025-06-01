@@ -1,0 +1,348 @@
+# CoreItems - Comprehensive Documentation
+
+# Table of Contents
+documentation:
+  sections:
+    - name: "Introduction"
+      content: >
+        CoreItems is a powerful custom items plugin that allows server administrators to create, organize, and distribute unique items with special properties and interactive features. The plugin introduces a namespace system for better organization, an intuitive GUI for item browsing, and interactive click functionality.
+      features:
+        - "Create custom items with unique properties"
+        - "Organize items in namespaces"
+        - "Interactive items with click commands"
+        - "User-friendly GUI for browsing and obtaining items"
+        - "Search functionality"
+        - "Extensive customization options"
+
+    - name: "Installation"
+      steps:
+        - "Download the CoreItems.jar file"
+        - "Place it in your server's plugins folder"
+        - "Restart your server"
+        - "The plugin will generate default configuration files"
+
+    - name: "Key Concepts"
+      concepts:
+        custom_items: "Custom items are special items with unique properties like custom names, lore, enchantments, and interactive commands. These items can be created through configuration files and given to players."
+        namespaces: "Namespaces are collections of custom items organized in separate folders. Each namespace has its own configuration file, allowing for better organization and separation of items."
+        interactive_commands: "Items can execute commands when right-clicked or left-clicked. These commands can include player placeholders for dynamic execution."
+        gui_system: "The plugin provides an intuitive graphical interface for browsing and obtaining custom items."
+
+    - name: "Commands and Permissions"
+      commands:
+        - command: "/coreitems"
+          description: "Opens the main GUI"
+          permission: "coreitems.menu"
+        - command: "/coreitems give <player> <namespace> <item>"
+          description: "Gives a custom item to a player"
+          permission: "coreitems.give"
+        - command: "/coreitems list <namespace> [page]"
+          description: "Lists all items in a namespace with pagination"
+          permission: "coreitems.use"
+        - command: "/coreitems reload"
+          description: "Reloads the plugin configuration"
+          permission: "coreitems.reload"
+        - command: "/coreitems menu"
+          description: "Alternative way to open the GUI"
+          permission: "coreitems.menu"
+        - command: "/coreitems help"
+          description: "Shows help information"
+          permission: "coreitems.use"
+      aliases:
+        - "/coreitems"
+        - "/citems"
+        - "/cit"
+        - "/core"
+        - "/cm"
+      permissions:
+        - permission: "coreitems.use"
+          description: "Basic access to plugin commands"
+          default: true
+        - permission: "coreitems.give"
+          description: "Ability to give custom items to players"
+          default: "op"
+        - permission: "coreitems.reload"
+          description: "Ability to reload the plugin"
+          default: "op"
+        - permission: "coreitems.menu"
+          description: "Access to the GUI menu"
+          default: true
+
+    - name: "Configuration Files"
+      config_files:
+        main_config:
+          file: "config.yml"
+          description: "Main plugin configuration file"
+          example: |
+            # Namespace settings
+            namespaces:
+              enabled: true
+              load-on-startup: true
+              default-namespace: "default"
+              directory: "customs"
+
+            # Command settings
+            commands:
+              main-command: "coreitems"
+              aliases:
+                - "citems"
+                - "cit"
+                - "core"
+                - "cm"
+
+            # Global item interaction settings
+            item-interactions:
+              global-cooldown: 500  # In milliseconds
+
+            # GUI settings
+            gui:
+              enabled: true
+              main-menu-title: "CoreItems: Namespaces"
+              items-menu-title: "CoreItems: {namespace}"
+              border-item: "BLACK_STAINED_GLASS_PANE"  # Set to "NONE" for no border
+              namespaces-per-page: 14
+              items-per-page: 21
+
+            # Search settings
+            search:
+              enabled: true
+              timeout: 30  # In seconds
+              button-material: "OAK_SIGN"
+              results-title: "Search Results: {query}"
+        namespace_config:
+          file: "customs/[namespace]/customs.yml"
+          description: "Configuration file for each namespace"
+          note: "Each namespace has its own configuration file located in this path"
+
+    - name: "Creating Custom Items"
+      basic_structure: |
+        items:
+          my_item_id:
+            material: DIAMOND_SWORD
+            name: "&bMy Custom Sword"
+            lore:
+              - "&7First line of lore"
+              - "&7Second line of lore"
+      properties:
+        - name: "material"
+          type: "String"
+          description: "Minecraft material type (required)"
+          example: "DIAMOND_SWORD"
+        - name: "name"
+          type: "String"
+          description: "Display name with color codes"
+          example: "&c&lFire Sword"
+        - name: "lore"
+          type: "List"
+          description: "Item description with color codes"
+          example: "- &7Ignites enemies on hit"
+        - name: "custom_model_data"
+          type: "Integer"
+          description: "Custom model data for resource packs"
+          example: "1001"
+        - name: "unbreakable"
+          type: "Boolean"
+          description: "Makes item unbreakable"
+          example: "true"
+        - name: "hide-attributes"
+          type: "Boolean"
+          description: "Hides item attributes"
+          example: "true"
+        - name: "glowing"
+          type: "Boolean"
+          description: "Adds enchantment glint"
+          example: "true"
+        - name: "is_enchanted"
+          type: "Boolean"
+          description: "Adds enchantment glint without visible enchantments"
+          example: "true"
+        - name: "enchantments"
+          type: "Map"
+          description: "Map of enchantment names to levels"
+          example: "sharpness: 5"
+        - name: "item-flags"
+          type: "List"
+          description: "List of item flags"
+          example: "- HIDE_ATTRIBUTES"
+        - name: "right_click_command"
+          type: "String"
+          description: "Command executed on right-click"
+          example: "effect give %player% strength 10 1"
+        - name: "left_click_command"
+          type: "String"
+          description: "Command executed on left-click"
+          example: "particle flame ~ ~ ~ 0.5 0.5 0.5 0.1 20"
+        - name: "cooldown"
+          type: "Integer"
+          description: "Item-specific cooldown in milliseconds"
+          example: "3000"
+        - name: "cancel_right_click"
+          type: "Boolean"
+          description: "Prevents block placement on right-click"
+          example: "true"
+        - name: "cancel_left_click"
+          type: "Boolean"
+          description: "Prevents block breaking on left-click"
+          example: "false"
+      example_items:
+        basic_sword: |
+          diamond_sword:
+            material: DIAMOND_SWORD
+            name: "&bDiamond Blade"
+            lore:
+              - "&7A special diamond sword"
+            unbreakable: true
+        magic_staff: |
+          magic_staff:
+            material: BLAZE_ROD
+            name: "&d&lMagic Staff"
+            lore:
+              - "&5Creates magical effects"
+              - "&7Right-click to cast a spell"
+              - "&7Left-click to check mana"
+            custom_model_data: 1001
+            is_enchanted: true
+            right_click_command: "particle portal ~ ~ ~ 0.5 0.5 0.5 0.1 100 normal"
+            left_click_command: "tell %player% Your mana is full!"
+            cooldown: 3000
+            cancel_right_click: true
+            cancel_left_click: false
+        special_book: |
+          special_book:
+            material: BOOK
+            name: "&#FF5500Ancient Tome"  # Hex color
+            lore:
+              - "&7Contains ancient knowledge"
+            glow: true
+            enchantments:
+              - "fortune:3"
+            item-flags:
+              - HIDE_ENCHANTS
+      color_formatting:
+        - type: "Traditional Bukkit color codes"
+          format: "Using & prefix (e.g., &c for red)"
+        - type: "Hex color codes"
+          format: "Using &#RRGGBB format (e.g., &#FF5500 for orange)"
+
+    - name: "Namespaces System"
+      directory_structure: |
+        plugins/CoreItems/
+        ├── config.yml
+        └── customs/
+            ├── default/              # Default namespace
+            │   └── customs.yml
+            ├── vip/                  # VIP items namespace
+            │   └── customs.yml
+            └── [your-namespace]/     # Your custom namespace
+                └── customs.yml
+      creating_namespace:
+        steps:
+          - "Navigate to plugins/CoreItems/customs/"
+          - "Create a new folder with your namespace name (e.g., mythical)"
+          - "Inside that folder, create a customs.yml file"
+          - "Add your custom items to the configuration"
+          - "Reload the plugin with /coreitems reload"
+      accessing_items:
+        command_example: "/coreitems give Player1 mythical dragon_sword"
+        gui_example: "Navigate to the 'mythical' namespace and click on the item"
+        default_namespace: "Items in the default namespace can be accessed without specifying the namespace: /coreitems give Player1 diamond_sword"
+
+    - name: "GUI System"
+      menus:
+        main_menu:
+          description: "The main menu displays all available namespaces"
+          features:
+            - "Browse all namespaces"
+            - "Search for specific namespaces"
+            - "Navigate through pages if there are many namespaces"
+        namespace_items_menu:
+          description: "Shows all items in a selected namespace"
+          features:
+            - "Browse all items in the namespace"
+            - "Left-click an item to receive one copy"
+            - "Right-click an item to receive a stack (64)"
+            - "Navigate through pages if there are many items"
+            - "Return to the main menu using the back button"
+      search_functionality:
+        steps:
+          - "Click the search button (oak sign) in the main menu"
+          - "The GUI will close and you'll be prompted to type a search term"
+          - "Type the namespace you're looking for or 'cancel' to cancel"
+          - "The search results menu will display matching namespaces"
+          - "Click on a result to navigate to that namespace"
+      navigation:
+        buttons:
+          - name: "Close Button"
+            description: "Closes the GUI (barrier in bottom middle)"
+          - name: "Back Button"
+            description: "Returns to the previous menu (barrier in bottom middle)"
+          - name: "Next Page"
+            description: "Goes to the next page (arrow in bottom right)"
+          - name: "Previous Page"
+            description: "Goes to the previous page (arrow in bottom left)"
+
+    - name: "Interactive Items"
+      click_commands:
+        right_click: "Executed when right-clicking with the item"
+        left_click: "Executed when left-clicking with the item"
+      placeholders:
+        - placeholder: "%player%"
+          description: "Replaced with the player's name"
+      cooldowns:
+        description: "Each item can have its own cooldown period"
+        setting: "Set with the cooldown property (in milliseconds)"
+        fallback: "Falls back to the global cooldown if not specified"
+      block_interaction:
+        right_click: "cancel_right_click: When true, prevents block placement when right-clicking"
+        left_click: "cancel_left_click: When true, prevents block breaking when left-clicking"
+
+    - name: "Tips and Best Practices"
+      categories:
+        organization:
+          - "Create logical namespaces based on item categories or purposes"
+          - "Use descriptive item IDs for easy identification"
+          - "Group related items in the same namespace"
+        performance:
+          - "Avoid excessive amounts of namespaces or items"
+          - "Set reasonable cooldowns for items with commands"
+          - "Use specific permissions to control access"
+        user_experience:
+          - "Provide clear names and descriptions in item lore"
+          - "Indicate item functionality in the lore"
+          - "Use color codes effectively to highlight important information"
+        commands:
+          - "Keep commands simple and focused"
+          - "Test commands before adding them to items"
+          - "Consider the impact of commands on server performance"
+
+    - name: "Troubleshooting"
+      common_issues:
+        item_not_appearing:
+          title: "Item Not Appearing in GUI"
+          solutions:
+            - "Ensure the item is properly configured in the customs.yml file"
+            - "Check that the material type is valid"
+            - "Verify the namespace is spelled correctly"
+        commands_not_executing:
+          title: "Commands Not Executing"
+          solutions:
+            - "Check that the command syntax is correct"
+            - "Ensure the player has permission to execute the command"
+            - "Verify the cooldown isn't preventing execution"
+        gui_not_opening:
+          title: "GUI Not Opening"
+          solutions:
+            - "Check that the player has the coreitems.menu permission"
+            - "Verify the plugin is properly loaded"
+            - "Look for errors in the console"
+        configuration_not_loading:
+          title: "Configuration Not Loading"
+          solutions:
+            - "Ensure all YAML files are properly formatted"
+            - "Check for syntax errors in your configuration"
+            - "Use a YAML validator if needed"
+      getting_help:
+        steps:
+          - "Check the server console for error messages"
+          - "Verify your configuration files"
+          - "Contact our support team through the appropriate channels"

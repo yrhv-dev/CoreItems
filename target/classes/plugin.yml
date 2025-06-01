@@ -1,0 +1,26 @@
+name: CoreItems
+version: 1.0
+main: com.yrhv.coreitems.CoreItems
+api-version: 1.20
+description: A custom items plugin for Minecraft servers
+
+commands:
+  coreitems:
+    description: Main command for CoreItems plugin
+    aliases: [citems, cit, core, cm]
+    usage: /<command> [give|reload|menu|help] [args...]
+    permission: coreitems.use
+    
+permissions:
+  coreitems.use:
+    description: Allows basic access to CoreItems commands
+    default: true
+  coreitems.give:
+    description: Allows giving custom items to players
+    default: op
+  coreitems.reload:
+    description: Allows reloading the plugin configuration
+    default: op
+  coreitems.menu:
+    description: Allows opening the custom items GUI menu
+    default: true

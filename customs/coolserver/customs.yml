@@ -1,0 +1,51 @@
+# CoolServer namespace custom items configuration
+# This namespace contains items specific to the CoolServer network
+#
+# Click action properties for items:
+# - cooldown: Individual cooldown in milliseconds for this item (overrides global setting)
+# - cancel_right_click: true/false to cancel block placement when right-clicking with this item
+# - cancel_left_click: true/false to cancel block breaking when left-clicking with this item
+
+items:
+  # Special themed items for the CoolServer
+  ice_blade:
+    material: DIAMOND_SWORD
+    name: "&b&lIce Blade"
+    lore:
+      - "&3Forged in the ancient glaciers"
+      - "&7Chills your enemies on contact"
+      - "&7Right-click to create an ice path"
+    custom_model_data: 3001
+    is_enchanted: true
+    right_click_command: "fill ~-1 ~ ~-1 ~1 ~ ~1 minecraft:ice replace minecraft:air"
+    cooldown: 5000  # 5 second cooldown
+    cancel_right_click: true
+    cancel_left_click: false
+    
+  flame_staff:
+    material: BLAZE_ROD
+    name: "&c&lFlame Staff"
+    lore:
+      - "&6Harness the power of fire"
+      - "&7Right-click to shoot fireballs"
+      - "&7Left-click to create a ring of fire"
+    custom_model_data: 3002
+    glow: true
+    right_click_command: "execute at %player% run summon minecraft:fireball ~ ~1 ~ {direction:[0.0,0.0,0.0],power:[0.0,0.0,0.0],ExplosionPower:1}"
+    left_click_command: "execute at %player% run fill ~2 ~ ~2 ~-2 ~ ~-2 minecraft:fire replace minecraft:air"
+    cooldown: 3000  # 3 second cooldown
+    cancel_right_click: true
+    cancel_left_click: true
+    
+  coolserver_pickaxe:
+    material: NETHERITE_PICKAXE
+    name: "&d&lCoolServer Pickaxe"
+    lore:
+      - "&5A pickaxe that mines in a 3x3 area"
+      - "&7Exclusive to CoolServer members"
+    unbreakable: true
+    enchantments:
+      - "efficiency:5"
+      - "fortune:3"
+    flags:
+      - HIDE_ENCHANTS
